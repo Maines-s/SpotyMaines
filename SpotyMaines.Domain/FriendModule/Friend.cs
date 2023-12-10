@@ -1,4 +1,5 @@
-﻿using SpotyMaines.Domain.Shared;
+﻿using SpotyMaines.Domain.ListenerModule;
+using SpotyMaines.Domain.Shared;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,7 +10,6 @@ namespace SpotyMaines.Domain.FriendModule
 {
     public class Friend : BaseEntity
     {
-        public Guid MainId { get; set; }
-        public Guid FriendId { get; set; }
+        public List<Listener> Listeners { get; set; }
     }
 }
