@@ -15,6 +15,8 @@ namespace SpotyMaines.Infra.ORM.ListenerModule
         {
             builder.ToTable("Listener");
 
+            builder.Property(x => x.Id).ValueGeneratedNever();
+
             builder.HasOne(x => x.User).WithMany().IsRequired().HasForeignKey(x => x.UserId).OnDelete(DeleteBehavior.NoAction);
             builder.HasMany(x => x.Friends)
                     .WithMany(x => x.Listeners)

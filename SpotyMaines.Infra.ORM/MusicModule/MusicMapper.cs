@@ -15,6 +15,8 @@ namespace SpotyMaines.Infra.ORM.MusicModule
         {
             builder.ToTable("Music");
 
+            builder.Property(x => x.Id).ValueGeneratedNever();
+
             builder.HasOne(x => x.User).WithMany().IsRequired().HasForeignKey(x => x.UserId).OnDelete(DeleteBehavior.NoAction);
         }
     }

@@ -15,6 +15,8 @@ namespace SpotyMaines.Infra.ORM.FriendModule
         {
             builder.ToTable("Friend");
 
+            builder.Property(x => x.Id).ValueGeneratedNever();
+
             builder.HasOne(x => x.User).WithMany().IsRequired().HasForeignKey(x => x.UserId).OnDelete(DeleteBehavior.NoAction);
             builder.HasMany(x => x.Listeners).WithMany(x => x.Friends);
         }
