@@ -1,4 +1,6 @@
-﻿using System;
+﻿using SpotyMaines.Domain.MusicsModule;
+using SpotyMaines.Domain.Shared;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,7 +8,9 @@ using System.Threading.Tasks;
 
 namespace SpotyMaines.Domain.PlayListModule
 {
-    internal class PlayList
+    public class PlayList : BaseEntity
     {
+        public List<Music> Musics { get; set; }
+        public string Name { get; set; }
     }
 }
