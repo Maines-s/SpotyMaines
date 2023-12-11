@@ -6,7 +6,8 @@ using System.Threading.Tasks;
 
 namespace SpotyMaines.Infra.ORM.Shared
 {
-    internal class BaseRepository
+    public class BaseRepository
     {
+        
     }
 }

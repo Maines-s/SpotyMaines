@@ -16,7 +16,7 @@ using System.Threading.Tasks;
 
 namespace SpotyMaines.Infra.ORM.Shared
 {
-    public class SpotyMainesDbContext : IdentityDbContext<User, IdentityRole<Guid>, Guid>
+    public class SpotyMainesDbContext : IdentityDbContext<User, IdentityRole<Guid>, Guid>, IPersistenceContext
     {
         private Guid userId;
 
