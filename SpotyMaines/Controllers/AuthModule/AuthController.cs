@@ -25,7 +25,7 @@ namespace SpotyMaines.Controllers.AuthModule
             this.mapper = mapper;
         }
 
-        [HttpPost("registrar")]
+        [HttpPost("register")]
         public async Task<IActionResult> Register(RegisterViewModel viewModel)
         {
             var user = mapper.Map<User>(viewModel);
@@ -40,6 +40,20 @@ namespace SpotyMaines.Controllers.AuthModule
             return Ok(tokenViewModel);
         }
 
+        [HttpPost("login")]
+        public async Task<IActionResult> Login(LoginViewModel LoginVM)
+        {
+            var result = await authService.AuthenticateAsync(LoginVM.Login, LoginVM.PassWord);
+
+            if(result.IsFailed)
+                return BadRequest(result.Errors);
+
+            var user = result.Value;
+
+            var tokenViewModel = GenerateJwt(user, DateTime.Now.AddDays(1));
+
+            return Ok(tokenViewModel);
+        }
         public static TokenViewModel GenerateJwt(User user, DateTime date)
         {
             string keyToken = CreateKeyToken(user, date);
