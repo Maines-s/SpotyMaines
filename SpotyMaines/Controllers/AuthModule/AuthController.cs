@@ -56,7 +56,7 @@ namespace SpotyMaines.Controllers.AuthModule
             return Ok(tokenViewModel);
         }
 
-        [HttpPost("exit")]
+        [HttpPost("logout")]
         public async Task<IActionResult> LogOut()
         {
             var result = await authService.Exit();
