@@ -8,7 +8,9 @@ namespace SpotyMaines.Configuration
     {
         public static void AddConfigureDependecyInjection(this IServiceCollection services, IConfiguration config)
         {
-            var connectionString = config.GetConnectionString("SqlServer");
+            //var connectionString = config.GetConnectionString("SqlServer");
+
+            string connectionString = Environment.GetEnvironmentVariable("DATABASE_CONNECTION_STRING");
 
             services.AddDbContext<IPersistenceContext, SpotyMainesDbContext>(optBuilder =>
             {

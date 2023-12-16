@@ -20,7 +20,9 @@ namespace SpotyMaines.Infra.ORM.Shared
                 .AddJsonFile("appsettings.json")
                 .Build();
 
-            string connectionString = config.GetConnectionString("SqlServer");
+            //string connectionString = config.GetConnectionString("SqlServer");
+
+            string connectionString = Environment.GetEnvironmentVariable("DATABASE_CONNECTION_STRING");
 
             builder.UseSqlServer(connectionString);
 
