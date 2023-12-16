@@ -17,4 +17,8 @@
     <ProjectReference Include="..\SpotyMaines.Domain\SpotyMaines.Domain.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="AutenticationModule\" />
+  </ItemGroup>
+
 </Project>

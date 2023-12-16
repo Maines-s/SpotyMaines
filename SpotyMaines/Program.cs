@@ -1,4 +1,13 @@
 
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
+using SpotyMaines.Application.AuthModule;
+using SpotyMaines.Configuration;
+using SpotyMaines.Configuration.AutoMapperConfig;
+using SpotyMaines.Domain.AutenticationModule;
+using SpotyMaines.Infra.ORM.Shared;
+using System.Text;
+
 namespace SpotyMaines
 {
     public class Program
@@ -7,16 +16,31 @@ namespace SpotyMaines
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            // Add services to the container.
+            builder.Services.Configure<ApiBehaviorOptions>(config =>
+            {
+                config.SuppressModelStateInvalidFilter = true;
+            });
+
+            builder.Services.AddTransient<AuthService>();
+            builder.Services.AddTransient<UserManager<User>>();
+            builder.Services.AddIdentityConfigurationMethod();
 
             builder.Services.AddControllers();
-            // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
+            builder.Services.AddAutoMapperConfig();
+            builder.Services.AddConfigureDependecyInjection(builder.Configuration);
+            builder.Services.AddSerilogConfig(builder.Logging);
+            builder.Services.AddControllerAddConfig();
+            builder.Services.AddSwaggerConfig();
+            builder.Services.AddAuthConfigurationMathod();
 
             var app = builder.Build();
 
-            // Configure the HTTP request pipeline.
+            app.UseCors("AllowAllOrigins");
+
+            app.UseAuthentication();
+
             if (app.Environment.IsDevelopment())
             {
                 app.UseSwagger();
