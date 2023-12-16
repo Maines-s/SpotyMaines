@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using FluentResults;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
@@ -53,6 +54,14 @@ namespace SpotyMaines.Controllers.AuthModule
             var tokenViewModel = GenerateJwt(user, DateTime.Now.AddDays(1));
 
             return Ok(tokenViewModel);
+        }
+
+        [HttpPost("exit")]
+        public async Task<IActionResult> LogOut()
+        {
+            var result = await authService.Exit();
+
+            return Ok(result);
         }
         public static TokenViewModel GenerateJwt(User user, DateTime date)
         {
