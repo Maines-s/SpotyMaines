@@ -60,6 +60,13 @@ namespace SpotyMaines.Application.AuthModule
             return Result.Ok(user);
         }
 
+        public async Task<Result<User>> Exit()
+        {
+            await signInManager.SignOutAsync();
+
+            return Result.Ok();
+        }
+
         public Result Validate(User user)
         {
             var validator = new UserValidator();
