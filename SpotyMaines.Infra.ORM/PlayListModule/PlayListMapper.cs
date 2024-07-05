@@ -17,7 +17,6 @@ namespace SpotyMaines.Infra.ORM.PlayListModule
 
             builder.Property(x => x.Id).ValueGeneratedNever();
 
-            builder.HasOne(x => x.User).WithMany().IsRequired().HasForeignKey(x => x.UserId).OnDelete(DeleteBehavior.NoAction);
             builder.HasOne(x => x.Listener).WithMany(x => x.PlayLists).IsRequired();
             builder.HasMany(x => x.Musics).WithMany(x => x.PlayLists).UsingEntity(j => j.ToTable("Musics_PlayLists"));
         }

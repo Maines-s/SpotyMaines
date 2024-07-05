@@ -1,4 +1,4 @@
-﻿namespace SpotyMaines.Application
+﻿namespace SpotyMaines.Domain
 {
     public class Class1
     {

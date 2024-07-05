@@ -6,7 +6,6 @@
         {
             services.AddAutoMapper(opt =>
             {
-                opt.AddProfile<UserProfile>();
             });
         }
     }

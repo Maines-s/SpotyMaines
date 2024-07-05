@@ -1,26 +1,27 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using SpotyMaines.Domain.AutenticationModule;
 using SpotyMaines.Domain.FriendModule;
 using SpotyMaines.Domain.ListenerModule;
 using SpotyMaines.Domain.MusicsModule;
 using SpotyMaines.Domain.PlayListModule;
 using SpotyMaines.Domain.RoomModule;
 using SpotyMaines.Domain.Shared;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using SpotyMaines.Infra.ORM.AutenticationModule;
 
 namespace SpotyMaines.Infra.ORM.Shared
 {
-    public class SpotyMainesDbContext : IdentityDbContext<User, IdentityRole<Guid>, Guid>, IPersistenceContext
+    public class SpotyMainesDbContext : IdentityDbContext<IdentityUser>, IPersistenceContext
     {
-        private Guid userId;
+        private readonly Guid? userId;
 
-        public SpotyMainesDbContext(DbContextOptions opt, ITenantProvider tenantProvider = null) : base(opt)
+        public DbSet<Friend> Friends { get; set; }
+        public DbSet<Listener> Listeners { get; set; }
+        public DbSet<Music> Musics { get; set; }
+        public DbSet<PlayList> PlayLists { get; set; }
+        public DbSet<Room> Rooms { get; set; }
+
+        public SpotyMainesDbContext(DbContextOptions<SpotyMainesDbContext> options, ITenantProvider tenantProvider = null) : base(options)
         {
             if (tenantProvider != null)
                 userId = tenantProvider.UserId;
@@ -28,35 +29,29 @@ namespace SpotyMaines.Infra.ORM.Shared
 
         public async Task<bool> SaveData()
         {
-            int afectedRegister = await SaveChangesAsync();
-
-            return afectedRegister > 0;
+            int affectedRegisters = await SaveChangesAsync();
+            return affectedRegisters > 0;
         }
 
         public void UndoChanges()
         {
-            var afectedRegister = ChangeTracker.Entries()
-            .Where(e => e.State != EntityState.Unchanged)
-            .ToList();
+            var affectedEntries = ChangeTracker.Entries()
+                .Where(e => e.State != EntityState.Unchanged)
+                .ToList();
 
-            foreach (var register in afectedRegister)
+            foreach (var entry in affectedEntries)
             {
-                switch (register.State)
+                switch (entry.State)
                 {
                     case EntityState.Added:
-                        register.State = EntityState.Detached;
+                        entry.State = EntityState.Detached;
                         break;
-
                     case EntityState.Deleted:
-                        register.State = EntityState.Unchanged;
+                        entry.State = EntityState.Unchanged;
                         break;
-
                     case EntityState.Modified:
-                        register.State = EntityState.Unchanged;
-                        register.CurrentValues.SetValues(register.OriginalValues);
-                        break;
-
-                    default:
+                        entry.State = EntityState.Unchanged;
+                        entry.CurrentValues.SetValues(entry.OriginalValues);
                         break;
                 }
             }
@@ -64,15 +59,8 @@ namespace SpotyMaines.Infra.ORM.Shared
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
-            builder.ApplyConfigurationsFromAssembly(typeof(SpotyMainesDbContext).Assembly);
-
-            builder.Entity<Friend>().HasQueryFilter(x => x.UserId == userId);
-            builder.Entity<Listener>().HasQueryFilter(x => x.UserId == userId);
-            builder.Entity<Music>().HasQueryFilter(x => x.UserId == userId);
-            builder.Entity<PlayList>().HasQueryFilter(x => x.UserId == userId);
-            builder.Entity<Room>().HasQueryFilter(x => x.UserId == userId);
-
             base.OnModelCreating(builder);
+            builder.ApplyConfigurationsFromAssembly(typeof(SpotyMainesDbContext).Assembly);
         }
     }
 }

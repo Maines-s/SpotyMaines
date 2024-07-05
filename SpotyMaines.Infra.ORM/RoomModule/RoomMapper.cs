@@ -18,7 +18,6 @@ namespace SpotyMaines.Infra.ORM.RoomModule
 
             builder.Property(x => x.Id).ValueGeneratedNever();
 
-            builder.HasOne(x => x.User).WithMany().IsRequired().HasForeignKey(x => x.UserId).OnDelete(DeleteBehavior.NoAction);
             builder.HasMany(x => x.Listeners).WithMany(x => x.Rooms);
             builder.HasMany(x => x.Musics).WithMany(x => x.Rooms).UsingEntity(j => j.ToTable("Musics_Rooms"));
         }
